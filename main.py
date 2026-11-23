@@ -9,12 +9,16 @@ PART_TWO = "then spits out three cubes like it's proud of itself."
 def main() -> None:
     line = PART_ONE + " " + PART_TWO
     assert "\n" not in line and "\r" not in line, "line must be a single line"
-    encoded = line.encode("utf-8")
     assert 1 <= len(line) <= 200, f"line must be 1-200 chars, got {len(line)}"
     assert line.strip(), "line must not be only whitespace"
+    encoded = line.encode("utf-8")
+    assert len(encoded) <= 200, f"line must fit 200 bytes, got {len(encoded)}"
     os.makedirs("/output", exist_ok=True)
     with open("/output/entry.txt", "w", encoding="utf-8") as f:
         f.write(line)
+    with open("/output/entry.txt", encoding="utf-8") as f:
+        written = f.read()
+    assert written == line, "written file content does not match the built line"
     print(f"Wrote {len(line)} characters to /output/entry.txt")
 
 
